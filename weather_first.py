@@ -5,7 +5,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 import requests
 import os
-
+import creds
 
 # Let us define the function responsible for the data collection
 def get_data():
@@ -20,18 +20,18 @@ def get_data():
 
     # Let us first get the coordinats of the city we will be working on and in my case I will be getting current weather conditiion for the city where Im currently staying 
     # in Poland called wroclaw
-    api_key = 'e932418f59f10d86d63bbc4d392ecd9d'
+    
     celsius_units  = 'metric'
     city ='Wroclaw'
     number = '5'
-    url = 'http://api.openweathermap.org/geo/1.0/direct?q='+city+'&limit='+number+'&appid='+api_key#+'&units='+celsius_units
+    url = 'http://api.openweathermap.org/geo/1.0/direct?q='+city+'&limit='+number+'&appid='+creds.api_key#+'&units='+celsius_units
     r = requests.get(url)
     location = r.json()
     latitude = str(location[0]['lat'])
     longitude = str(location[0]['lon'])
     #After we can now pass to the weather data collection
     url = 'https://api.openweathermap.org/data/2.5/weather?lat='+latitude+'&lon='+longitude+'&appid='+\
-                api_key+'&units='+celsius_units
+                creds.api_key+'&units='+celsius_units
     r = requests.get(url)
     data = r.json()
 
